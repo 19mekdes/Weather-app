@@ -18,7 +18,7 @@ class HourlyCard extends StatelessWidget {
       width: 90,
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        // ignore: deprecated_member_use
+   
         color: Colors.white.withOpacity(0.12),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: Colors.white24),

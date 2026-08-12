@@ -80,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
             longitude: position.longitude,
           );
         } catch (e) {
-          // If reverse geocoding fails, fall back to coordinates.
           name = '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}';
         }
       }
