@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 12),
                       ElevatedButton(
                         onPressed: () async {
-                          // Open app settings so the user can enable location permissions
+                          
                           await Geolocator.openAppSettings();
                         },
                         child: const Text('Open Settings'),
@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: sectionSpacing),
 
-              /// Centered Weather Summary
+              
               Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -311,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: sectionSpacing),
 
-              /// Weather Info
+           
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: width * 0.08,
@@ -357,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final temps = weather!.hourlyTemperatures;
                   final codes = weather!.hourlyWeatherCodes;
                   if (times.isEmpty || temps.isEmpty) {
-                    // Fallback: generate hourly entries from current time using current temperature
+            
                     debugPrint('Hourly API data missing — using fallback hourly values');
                     final fallbackCount = 12;
                     final generatedTimes = List<DateTime>.generate(

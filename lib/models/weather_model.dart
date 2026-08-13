@@ -165,7 +165,7 @@ class WeatherModel {
   }
 
   String get weatherIconAsset {
-    // Use local assets for weather icons. Add more files to assets/weather/ as needed.
+    
     switch (weatherCode) {
       case 0:
       case 1:
