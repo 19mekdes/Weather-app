@@ -28,6 +28,4 @@ flutter:
   assets:
     - assets/weather/
 
-  # Uncomment if you add weather images later
-  # assets:
-  #   - assets/images/
+  

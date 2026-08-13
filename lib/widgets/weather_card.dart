@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class WeatherCard extends StatelessWidget {
   final String temperature;
   final String description;
