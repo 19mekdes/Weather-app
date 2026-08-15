@@ -4,15 +4,15 @@ import '../models/weather_model.dart';
 
 class WeatherService {
   static const String _baseUrl = 'https://api.open-meteo.com/v1/forecast';
-  static const String _geocodeUrl = 'https://geocoding-api.open-meteo.com/v1/reverse';
+  static const String _geocodeUrl =
+      'https://geocoding-api.open-meteo.com/v1/reverse';
 
   Future<WeatherModel> fetchWeather({
     required double latitude,
     required double longitude,
   }) async {
-    
     final apiUrl =
-      '$_baseUrl?latitude=$latitude&longitude=$longitude&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m&hourly=temperature_2m,weathercode&timezone=auto';
+        '$_baseUrl?latitude=$latitude&longitude=$longitude&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m&hourly=temperature_2m,weathercode&timezone=auto';
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
