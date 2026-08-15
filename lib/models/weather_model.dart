@@ -24,7 +24,7 @@ class WeatherModel {
   });
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
-    // Parse current values (supports older and newer Open-Meteo responses)
+    
     final current = json['current'] ?? json['current_weather'] ?? {};
 
     // Parse hourly arrays if available
@@ -52,7 +52,7 @@ class WeatherModel {
     return WeatherModel(
       temperature: (current['temperature_2m'] ?? current['temperature']) != null
           ? ((current['temperature_2m'] ?? current['temperature']) as num)
-              .toDouble()
+                .toDouble()
           : 0.0,
       humidity: (current['relative_humidity_2m'] ?? 0) is num
           ? ((current['relative_humidity_2m'] ?? 0) as num).toDouble()
@@ -63,11 +63,11 @@ class WeatherModel {
       precipitation: (current['precipitation'] ?? 0) is num
           ? ((current['precipitation'] ?? 0) as num).toDouble()
           : 0.0,
-      weatherCode: (current['weather_code'] ?? current['weathercode'] ?? 0)
-          as int,
+      weatherCode:
+          (current['weather_code'] ?? current['weathercode'] ?? 0) as int,
       windSpeed: (current['wind_speed_10m'] ?? current['windspeed'] ?? 0) is num
           ? ((current['wind_speed_10m'] ?? current['windspeed'] ?? 0) as num)
-              .toDouble()
+                .toDouble()
           : 0.0,
       windDirection: (current['wind_direction_10m'] ?? 0) is num
           ? ((current['wind_direction_10m'] ?? 0) as num).toDouble()
@@ -165,7 +165,6 @@ class WeatherModel {
   }
 
   String get weatherIconAsset {
-    
     switch (weatherCode) {
       case 0:
       case 1:

@@ -6,12 +6,11 @@ import '../services/weather_service.dart';
 import '../utils/colors.dart';
 import '../widgets/hourly_card.dart';
 import '../widgets/info_item.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
- State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -44,13 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (permission == LocationPermission.deniedForever) {
       throw Exception(
-          'Location permissions are permanently denied, we cannot request permissions.');
+        'Location permissions are permanently denied, we cannot request permissions.',
+      );
     }
 
     return await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-      ),
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
     );
   }
 
@@ -64,10 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
       String name;
       if (kIsWeb) {
-        
         final lat = position.latitude;
         final lon = position.longitude;
-        // Addis Abeba approx (9.03, 38.74) — allow a small tolerance.
         if ((lat - 9.03).abs() <= 0.25 && (lon - 38.74).abs() <= 0.25) {
           name = 'Addis Abeba';
         } else {
@@ -80,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
             longitude: position.longitude,
           );
         } catch (e) {
-          name = '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}';
+          name =
+              '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}';
         }
       }
 
@@ -105,9 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return Scaffold(
         backgroundColor: AppColors.backgroundBottom,
         body: const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.white,
-          ),
+          child: CircularProgressIndicator(color: AppColors.white),
         ),
       );
     }
@@ -157,7 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 12),
                       ElevatedButton(
                         onPressed: () async {
-                          
                           await Geolocator.openAppSettings();
                         },
                         child: const Text('Open Settings'),
@@ -174,9 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (weather == null) {
       return const Scaffold(
-        body: Center(
-          child: Text("Failed to load weather"),
-        ),
+        body: Center(child: Text("Failed to load weather")),
       );
     }
 
@@ -258,7 +250,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: sectionSpacing),
 
-              
               Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -311,7 +302,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: sectionSpacing),
 
-           
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: width * 0.08,
@@ -319,13 +309,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   InfoItem(
                     icon: Icons.air,
-                    value:
-                        "${weather!.windSpeed.toStringAsFixed(1)} km/h",
+                    value: "${weather!.windSpeed.toStringAsFixed(1)} km/h",
                   ),
                   InfoItem(
                     icon: Icons.water_drop,
-                    value:
-                        "${weather!.humidity.toStringAsFixed(0)}%",
+                    value: "${weather!.humidity.toStringAsFixed(0)}%",
                   ),
                   InfoItem(
                     icon: Icons.thermostat,
@@ -352,40 +340,103 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(
                 height: height * 0.18,
-                child: Builder(builder: (context) {
-                  final times = weather!.hourlyTimes;
-                  final temps = weather!.hourlyTemperatures;
-                  final codes = weather!.hourlyWeatherCodes;
-                  if (times.isEmpty || temps.isEmpty) {
-            
-                    debugPrint('Hourly API data missing — using fallback hourly values');
-                    final fallbackCount = 12;
-                    final generatedTimes = List<DateTime>.generate(
-                      fallbackCount,
-                      (i) => DateTime.now().add(Duration(hours: i)),
-                    );
-                    final generatedTemps = List<double>.filled(
-                      fallbackCount,
-                      weather!.temperature,
-                    );
-                    final generatedCodes = List<int>.filled(
-                      fallbackCount,
-                      weather!.weatherCode,
-                    );
-                   
+                child: Builder(
+                  builder: (context) {
+                    final times = weather!.hourlyTimes;
+                    final temps = weather!.hourlyTemperatures;
+                    final codes = weather!.hourlyWeatherCodes;
+                    if (times.isEmpty || temps.isEmpty) {
+                      debugPrint(
+                        'Hourly API data missing — using fallback hourly values',
+                      );
+                      final fallbackCount = 12;
+                      final generatedTimes = List<DateTime>.generate(
+                        fallbackCount,
+                        (i) => DateTime.now().add(Duration(hours: i)),
+                      );
+                      final generatedTemps = List<double>.filled(
+                        fallbackCount,
+                        weather!.temperature,
+                      );
+                      final generatedCodes = List<int>.filled(
+                        fallbackCount,
+                        weather!.weatherCode,
+                      );
+
+                      final now = DateTime.now();
+                      int startIndex = 0;
+                      const int hoursToShow = 12;
+                      final itemCount = hoursToShow;
+
+                      IconData iconForCode(int code) {
+                        if (code == 0) return Icons.wb_sunny;
+                        if (code == 1 || code == 2) return Icons.wb_cloudy;
+                        if (code == 3) return Icons.cloud;
+                        if (code == 45 || code == 48) return Icons.blur_on;
+                        if (code == 51 || code == 53 || code == 55)
+                          return Icons.grain;
+                        if (code == 61 || code == 63 || code == 65)
+                          return Icons.grain;
+                        if (code == 71 || code == 73 || code == 75)
+                          return Icons.ac_unit;
+                        if (code == 95) return Icons.flash_on;
+                        return Icons.cloud;
+                      }
+
+                      return ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: itemCount,
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: width * 0.04),
+                        itemBuilder: (context, index) {
+                          final i = index;
+                          final dt = generatedTimes[i];
+                          final temp = generatedTemps[i];
+                          final code = generatedCodes[i];
+
+                          String label;
+                          if (i == startIndex &&
+                              dt.difference(now).inMinutes.abs() < 90) {
+                            label = 'Now';
+                          } else {
+                            final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+                            final suffix = dt.hour < 12 ? 'AM' : 'PM';
+                            label = '$hour $suffix';
+                          }
+
+                          return SizedBox(
+                            width: width * 0.26,
+                            child: HourlyCard(
+                              time: label,
+                              temperature: '${temp.toStringAsFixed(0)}°',
+                              icon: iconForCode(code),
+                            ),
+                          );
+                        },
+                      );
+                    }
+
                     final now = DateTime.now();
-                    int startIndex = 0;
+                    int startIndex = times.indexWhere((t) => !t.isBefore(now));
+                    if (startIndex == -1) startIndex = 0;
                     const int hoursToShow = 12;
-                    final itemCount = hoursToShow;
+                    final endIndex = (startIndex + hoursToShow).clamp(
+                      0,
+                      times.length,
+                    );
+                    final itemCount = endIndex - startIndex;
 
                     IconData iconForCode(int code) {
                       if (code == 0) return Icons.wb_sunny;
                       if (code == 1 || code == 2) return Icons.wb_cloudy;
                       if (code == 3) return Icons.cloud;
                       if (code == 45 || code == 48) return Icons.blur_on;
-                      if (code == 51 || code == 53 || code == 55) return Icons.grain;
-                      if (code == 61 || code == 63 || code == 65) return Icons.grain;
-                      if (code == 71 || code == 73 || code == 75) return Icons.ac_unit;
+                      if (code == 51 || code == 53 || code == 55)
+                        return Icons.grain;
+                      if (code == 61 || code == 63 || code == 65)
+                        return Icons.grain;
+                      if (code == 71 || code == 73 || code == 75)
+                        return Icons.ac_unit;
                       if (code == 95) return Icons.flash_on;
                       return Icons.cloud;
                     }
@@ -393,15 +444,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     return ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: itemCount,
-                      separatorBuilder: (context, index) => SizedBox(width: width * 0.04),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(width: width * 0.04),
                       itemBuilder: (context, index) {
-                        final i = index;
-                        final dt = generatedTimes[i];
-                        final temp = generatedTemps[i];
-                        final code = generatedCodes[i];
+                        final i = startIndex + index;
+                        final dt = times[i];
+                        final temp = temps.length > i ? temps[i] : 0.0;
+                        final code = codes.length > i
+                            ? codes[i]
+                            : weather!.weatherCode;
 
                         String label;
-                        if (i == startIndex && dt.difference(now).inMinutes.abs() < 90) {
+                        if (i == startIndex &&
+                            dt.difference(now).inMinutes.abs() < 90) {
                           label = 'Now';
                         } else {
                           final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
@@ -419,57 +474,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     );
-                  }
-
-                  final now = DateTime.now();
-                  int startIndex = times.indexWhere((t) => !t.isBefore(now));
-                  if (startIndex == -1) startIndex = 0;
-                  const int hoursToShow = 12;
-                  final endIndex = (startIndex + hoursToShow).clamp(0, times.length);
-                  final itemCount = endIndex - startIndex;
-
-                  IconData iconForCode(int code) {
-                    if (code == 0) return Icons.wb_sunny;
-                    if (code == 1 || code == 2) return Icons.wb_cloudy;
-                    if (code == 3) return Icons.cloud;
-                    if (code == 45 || code == 48) return Icons.blur_on;
-                    if (code == 51 || code == 53 || code == 55) return Icons.grain;
-                    if (code == 61 || code == 63 || code == 65) return Icons.grain;
-                    if (code == 71 || code == 73 || code == 75) return Icons.ac_unit;
-                    if (code == 95) return Icons.flash_on;
-                    return Icons.cloud;
-                  }
-
-                  return ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: itemCount,
-                    separatorBuilder: (context, index) => SizedBox(width: width * 0.04),
-                    itemBuilder: (context, index) {
-                      final i = startIndex + index;
-                      final dt = times[i];
-                      final temp = temps.length > i ? temps[i] : 0.0;
-                      final code = codes.length > i ? codes[i] : weather!.weatherCode;
-
-                      String label;
-                      if (i == startIndex && dt.difference(now).inMinutes.abs() < 90) {
-                        label = 'Now';
-                      } else {
-                        final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
-                        final suffix = dt.hour < 12 ? 'AM' : 'PM';
-                        label = '$hour $suffix';
-                      }
-
-                      return SizedBox(
-                        width: width * 0.26,
-                        child: HourlyCard(
-                          time: label,
-                          temperature: '${temp.toStringAsFixed(0)}°',
-                          icon: iconForCode(code),
-                        ),
-                      );
-                    },
-                  );
-                }),
+                  },
+                ),
               ),
 
               SizedBox(height: sectionSpacing),
