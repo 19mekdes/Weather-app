@@ -6,6 +6,7 @@ import '../services/weather_service.dart';
 import '../utils/colors.dart';
 import '../widgets/hourly_card.dart';
 import '../widgets/info_item.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -64,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (kIsWeb) {
         final lat = position.latitude;
         final lon = position.longitude;
+        // Addis Abeba approx (9.03, 38.74) — allow a small tolerance.
         if ((lat - 9.03).abs() <= 0.25 && (lon - 38.74).abs() <= 0.25) {
           name = 'Addis Abeba';
         } else {
@@ -373,12 +375,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (code == 1 || code == 2) return Icons.wb_cloudy;
                         if (code == 3) return Icons.cloud;
                         if (code == 45 || code == 48) return Icons.blur_on;
-                        if (code == 51 || code == 53 || code == 55)
+                        if (code == 51 || code == 53 || code == 55) {
                           return Icons.grain;
-                        if (code == 61 || code == 63 || code == 65)
+                        }
+                        if (code == 61 || code == 63 || code == 65) {
                           return Icons.grain;
-                        if (code == 71 || code == 73 || code == 75)
+                        }
+                        if (code == 71 || code == 73 || code == 75) {
                           return Icons.ac_unit;
+                        }
                         if (code == 95) return Icons.flash_on;
                         return Icons.cloud;
                       }
@@ -431,12 +436,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (code == 1 || code == 2) return Icons.wb_cloudy;
                       if (code == 3) return Icons.cloud;
                       if (code == 45 || code == 48) return Icons.blur_on;
-                      if (code == 51 || code == 53 || code == 55)
+                      if (code == 51 || code == 53 || code == 55) {
                         return Icons.grain;
-                      if (code == 61 || code == 63 || code == 65)
+                      }
+                      if (code == 61 || code == 63 || code == 65) {
                         return Icons.grain;
-                      if (code == 71 || code == 73 || code == 75)
+                      }
+                      if (code == 71 || code == 73 || code == 75) {
                         return Icons.ac_unit;
+                      }
                       if (code == 95) return Icons.flash_on;
                       return Icons.cloud;
                     }

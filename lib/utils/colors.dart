@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class AppColors {
   static const Color backgroundTop = Color(0xFF2C2E43);
   static const Color backgroundMiddle = Color(0xFF1A1B2E);
